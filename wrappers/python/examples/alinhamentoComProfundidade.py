@@ -29,18 +29,31 @@ try:
         depth_image = np.asanyarray(aligned_depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
 
-        point = (400,300)
+        point_one = (200,170)
+        point_two = (100,400)
+        point_three = (440,165)
+        point_four = (565,375)
 
-        cv2.circle(color_image, point, 4, (0, 0, 255))
-        distance = depth_image[point[1], point[0]]
+        cv2.circle(color_image, point_one, 4, (0, 0, 255))
+        cv2.circle(color_image, point_two, 4, (0, 0, 255))
+        cv2.circle(color_image, point_three, 4, (0, 0, 255))
+        cv2.circle(color_image, point_four, 4, (0, 0, 255))
+
+        distance_one = depth_image[point_one[1], point_one[0]]
+        distance_two = depth_image[point_two[1], point_two[0]]
+        distance_three = depth_image[point_three[1], point_three[0]]
+        distance_four = depth_image[point_four[1], point_four[0]]
         # print(distance)
-        cv2.putText(color_image, "{}mm".format(distance), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        cv2.putText(color_image, "p1 {}mm".format(distance_one), (point_one[0], point_one[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        cv2.putText(color_image, "p2 {}mm".format(distance_two), (point_two[0], point_two[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        cv2.putText(color_image, "p3 {}mm".format(distance_three), (point_three[0], point_three[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        cv2.putText(color_image, "{}mm".format(distance_four), (point_four[0], point_four[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
         
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
         images = np.hstack((color_image, depth_colormap))
         
         #Usa o valor de pixel da imagem colorida com alinhamento de profundidade para obter eixos 3D
-        x, y = 400, 300
+        x, y = 200, 300
         depth = aligned_depth_frame.get_distance(x, y)
         dx ,dy, dz = rs.rs2_deproject_pixel_to_point(color_intrin, [x,y], depth)
         distance = math.sqrt(((dx)**2) + ((dy)**2) + ((dz)**2))
